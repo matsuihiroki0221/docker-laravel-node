@@ -15,4 +15,6 @@ RUN apt-get update && \
 # 開発用
 FROM base AS dev
 
-WORKDIR /var/www/html
+WORKDIR /app
+
+CMD ["/bin/ash"]
