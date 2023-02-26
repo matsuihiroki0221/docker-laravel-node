@@ -5,10 +5,9 @@ volumes:
 
 services:
   nginx:
-    container_name: nginx
     build:
       context: .
-      dockerfile: ./.docker/nginx/Dockerfile
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - ${WEB_PORT}:80
     tty: true
@@ -16,26 +15,24 @@ services:
       - front
 
   front:
-    container_name: front
     build:
       context: .
-      dockerfile: ./.docker/front.Dockerfile
-      target: dev
+      dockerfile: ./docker/front/Dockerfile
+      # target: dev
     expose:
-      - 3000
+      - 5173
     volumes:
       - ./front:/app:cached
     stdin_open: true
     tty: true
-    restart: always
     depends_on:
       - api
+    command: /bin/bash
 
   api:
-    container_name: api
     build:
       context: .
-      dockerfile: ./.docker/api/Dockerfile
+      dockerfile: ./docker/api/Dockerfile
       target: dev
     environment:
       DB_CONNECTION: mysql
@@ -52,11 +49,9 @@ services:
       - 9000
     tty: true
     restart: always
+
   db:
-    container_name: db
-    build:
-      context: .
-      dockerfile: ./.docker/db/Dockerfile
+    image: mysql:8.0
     ports:
       - ${DB_PORT}:3306
     environment:
@@ -67,3 +62,4 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - mysql-volume:/var/lib/mysql:cached
+      - ./docker/db/my.cnf:/etc/my.cnf

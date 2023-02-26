@@ -1,6 +1,6 @@
 FROM php:8.1-fpm-alpine3.15 AS base
 
-COPY .docker/api/conf/php.ini /usr/local/etc/php/php.ini
+COPY docker/api/conf/php.ini /usr/local/etc/php/php.ini
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -17,7 +17,7 @@ WORKDIR /var/www/html
 # 開発用
 FROM base AS dev
 
-CMD ["php-fpm", "-F"]
+CMD ["php-fpm"]
 
 
 # 本番環境用
