@@ -5,7 +5,6 @@ volumes:
 
 services:
   nginx:
-    container_name: nginx
     build:
       context: .
       dockerfile: ./.docker/nginx/Dockerfile
@@ -16,23 +15,20 @@ services:
       - front
 
   front:
-    container_name: front
     build:
       context: .
-      dockerfile: ./.docker/front.Dockerfile
+      dockerfile: ./.docker/front/Dockerfile
       target: dev
     expose:
-      - 3000
+      - 5173
     volumes:
       - ./front:/app:cached
     stdin_open: true
     tty: true
-    restart: always
     depends_on:
       - api
 
   api:
-    container_name: api
     build:
       context: .
       dockerfile: ./.docker/api/Dockerfile
@@ -52,8 +48,8 @@ services:
       - 9000
     tty: true
     restart: always
+
   db:
-    container_name: db
     build:
       context: .
       dockerfile: ./.docker/db/Dockerfile
